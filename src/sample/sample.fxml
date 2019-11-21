@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.Slider?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.media.MediaView?>
+
+<HBox fx:id="parent" focusTraversable="true" onKeyReleased="#keyPress" prefHeight="800.0" prefWidth="1400.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.Controller">
+   <children>
+      <VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1000.0">
+         <children>
+            <StackPane onMouseClicked="#playScroll" onSwipeLeft="#playScroll" onSwipeRight="#playScroll" prefHeight="150.0" prefWidth="200.0">
+               <children>
+                  <MediaView fx:id="mediaView" fitHeight="600.0" fitWidth="800.0" />
+               </children>
+            </StackPane>
+            <Slider fx:id="playBar" focusTraversable="false" onMouseClicked="#playScroll" onTouchMoved="#playScroll" prefHeight="200.0" />
+            <StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="50.0" prefWidth="200.0">
+               <children>
+                  <Slider fx:id="volumeBar" focusTraversable="false" minWidth="200.0" prefWidth="0.0" />
+               </children>
+            </StackPane>
+         </children>
+         <padding>
+            <Insets top="30.0" />
+         </padding>
+      </VBox>
+      <StackPane prefHeight="900.0" prefWidth="300.0">
+         <children>
+            <ListView focusTraversable="false" prefHeight="800.0" prefWidth="300.0">
+               <StackPane.margin>
+                  <Insets />
+               </StackPane.margin>
+            </ListView>
+         </children>
+         <HBox.margin>
+            <Insets left="30.0" />
+         </HBox.margin>
+      </StackPane>
+   </children>
+</HBox>
