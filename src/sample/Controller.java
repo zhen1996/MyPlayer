@@ -15,6 +15,8 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
+import javafx.scene.control.TextArea;
+import javafx.scene.control.TextField;
 import javafx.scene.effect.BlendMode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.Background;
@@ -27,27 +29,25 @@ import javafx.scene.media.MediaView;
 import javafx.util.Duration;
 
 public class Controller implements Initializable {
-  @FXML
-  private Button startTime;
-  @FXML
-  private Button endTime;
-  @FXML
-  private Button play;
-  @FXML
-  private Button pause;
+
   @FXML
   private MediaView mediaView;
-  @FXML
-  private Label mediaTimeShow;
   @FXML
   private Slider playBar;
   @FXML
   private Slider volumeBar;
   @FXML
   private HBox parent;
+  @FXML
+  private TextField editText;
+  @FXML
+  private TextArea showText;
+
 
   private MediaPlayer mediaPlayer;//播放器
   private double totalTime;//视频总长
+  private ItemManager itemManager;
+  private double distance = 5 * 1000;//快进，后退时间--5秒
 
   @Override
   public void initialize(URL location, ResourceBundle resources) {
@@ -59,37 +59,57 @@ public class Controller implements Initializable {
     mediaPlayer.setOnReady(() -> {
           //初始化
           mediaPlayer.pause();//暂停
+
           this.mediaPlayer = mediaPlayer;
           this.totalTime = mediaPlayer.getTotalDuration().toMillis();
           playBar.setMax(this.totalTime);
           playBar.setMin(0);
-          playBar.setBlendMode(BlendMode.RED);
           volumeBar.setValue(80);
           volumeBar.setShowTickLabels(true);
           parent.requestFocus();
-
+          itemManager = new ItemManager(this.mediaPlayer, editText, showText);//manager初始化
         }
     );
-//    playBar.valueProperty().addListener((a,b,c)->{
-//      mediaPlayer.seek(new Duration(playBar.getValue()));
-//    });
+
     mediaPlayer.currentTimeProperty().addListener((a, b, c) -> {
       playBar.setValue(mediaPlayer.getCurrentTime().toMillis());
+      //视频时间同步更新
+
     });
-//    parent.setOnKeyReleased(a->{
-//      System.out.println(a.getCode());
-//    });
+    mediaPlayer.volumeProperty().bind(volumeBar.valueProperty());//音量绑定
+
+
   }
+
 
   @FXML
   public void play() {
-    mediaPlayer.play();
-
+    if (mediaPlayer.getStatus() == MediaPlayer.Status.PLAYING)
+      mediaPlayer.pause();
+    else
+      mediaPlayer.play();
   }
 
   @FXML
-  public void pause() {
-    mediaPlayer.pause();
+  public void forward() {
+    double currentTime = mediaPlayer.getCurrentTime().toMillis();
+    double toTime = currentTime + distance;//抵达的时间
+    Duration duration = new Duration(toTime);
+    if (toTime >= totalTime) {
+      mediaPlayer.stop();
+    } else
+
+      mediaPlayer.seek(new Duration(toTime));
+  }
+
+  @FXML
+  public void back() {
+    double currentTime = mediaPlayer.getCurrentTime().toMillis();
+    double toTime = currentTime - distance;//抵达的时间
+    if (toTime < 0) {
+      toTime = 0;
+    }
+    mediaPlayer.seek(new Duration(toTime));
   }
 
   /**
@@ -101,22 +121,37 @@ public class Controller implements Initializable {
     if (mediaPlayer.getStatus() == MediaPlayer.Status.PLAYING)
       mediaPlayer.pause();
     mediaPlayer.seek(new Duration(value));
-    System.out.println("tets");
   }
 
   @FXML
-  public void keyPress(KeyEvent event){
+  public void keyPress(KeyEvent event) {
     System.out.println(event.getCode().getName());
     /**
      * 快进，后退，暂停/播放，下一个，上一个，进行编辑，
      */
+    String name = event.getCode().getName();
+    System.out.println(name);
+    if (name.equals("Tab")) {
+      play();
+    } else if (name.equals("Up")) {
+      itemManager.last();
+    } else if (name.equals("Down")) {
+      itemManager.next();
+    } else if (name.equals("Enter")) {
+      itemManager.makeInfo();
+    } else if (name.equals("")) {
+      //前进
+    } else if (name.equals("")) {
+      //后退
+    }
+
 
   }
 
-  public boolean check() {
-    if (mediaPlayer != null)
-      return true;
-    return false;
+
+  @FXML
+  public void export() {
+
   }
 
 
