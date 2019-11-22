@@ -23,13 +23,20 @@
             <Slider fx:id="playBar" focusTraversable="false" onMouseClicked="#playScroll" onTouchMoved="#playScroll" prefHeight="100.0" />
             <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="30.0">
                <children>
-                  <Button focusTraversable="false" mnemonicParsing="false" onAction="#back" prefHeight="80.0" prefWidth="120.0" text="后退">
+                  <Button focusTraversable="false" mnemonicParsing="false" onAction="#back" prefHeight="60.0" prefWidth="80.0" text="后退">
                      <HBox.margin>
                         <Insets left="50.0" />
                      </HBox.margin>
                   </Button>
-                  <Button focusTraversable="false" mnemonicParsing="false" onAction="#play" prefHeight="80.0" prefWidth="120.0" text="播放/暂停" />
-                  <Button focusTraversable="false" mnemonicParsing="false" onAction="#forward" prefHeight="80.0" prefWidth="120.0" text="快进" />
+                  <Button focusTraversable="false" mnemonicParsing="false" onAction="#play" prefHeight="60.0" prefWidth="80.0" text="播放/暂停" />
+                  <Button focusTraversable="false" mnemonicParsing="false" onAction="#forward" prefHeight="60.0" prefWidth="80.0" text="快进" />
+                  <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
+                     <children>
+                        <Label fx:id="currentTimeShow" />
+                        <Label text="/" />
+                        <Label fx:id="totalTimeShow" />
+                     </children>
+                  </HBox>
                   <Slider fx:id="volumeBar" focusTraversable="false" minWidth="200.0" prefWidth="0.0">
                      <HBox.margin>
                         <Insets left="100.0" />

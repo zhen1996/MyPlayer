@@ -1,7 +1,9 @@
 package sample;
 
 import java.awt.*;
+import java.io.File;
 import java.net.URL;
+import java.sql.Time;
 import java.util.ResourceBundle;
 import java.util.concurrent.TimeUnit;
 
@@ -26,6 +28,8 @@ import javafx.scene.layout.VBox;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.media.MediaView;
+import javafx.stage.FileChooser;
+import javafx.stage.Stage;
 import javafx.util.Duration;
 
 public class Controller implements Initializable {
@@ -42,7 +46,10 @@ public class Controller implements Initializable {
   private TextField editText;
   @FXML
   private TextArea showText;
-
+  @FXML
+  private Label currentTimeShow;
+  @FXML
+  private Label totalTimeShow;
 
   private MediaPlayer mediaPlayer;//播放器
   private double totalTime;//视频总长
@@ -67,14 +74,16 @@ public class Controller implements Initializable {
           volumeBar.setValue(80);
           volumeBar.setShowTickLabels(true);
           parent.requestFocus();
+          totalTimeShow.setText(TimeUtil.getFormatTime(totalTime));
           itemManager = new ItemManager(this.mediaPlayer, editText, showText);//manager初始化
         }
     );
 
     mediaPlayer.currentTimeProperty().addListener((a, b, c) -> {
-      playBar.setValue(mediaPlayer.getCurrentTime().toMillis());
+      double now = mediaPlayer.getCurrentTime().toMillis();
+      playBar.setValue(now);
       //视频时间同步更新
-
+      currentTimeShow.setText(TimeUtil.getFormatTime(now));//时间条显示
     });
     mediaPlayer.volumeProperty().bind(volumeBar.valueProperty());//音量绑定
 
